@@ -1,7 +1,6 @@
 package model;
 
-public interface ScannerListener {
+public interface PointOfSaleInterface {
     void onScan(String barCode);
-
     void onExit();
 }

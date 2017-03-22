@@ -1,11 +1,11 @@
-package connectors.db;
 
 import model.Item;
+import model.db.DaoInterface;
 
 import java.util.Map;
 import java.util.Optional;
 
-public class ProductDAO implements DataBaseInterface {
+public class ProductDAO implements DaoInterface {
 
     private Map<String, Item> map;
 

@@ -1,9 +1,9 @@
-package connectors.db;
+package model.db;
 
 import model.Item;
 
 import java.util.Optional;
 
-public interface DataBaseInterface {
+public interface DaoInterface {
     Optional<Item> checkProductAvailability(String barCode);
 }

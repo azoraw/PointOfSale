@@ -1,10 +1,7 @@
 package model;
 
-import connectors.db.ProductDAO;
-import connectors.io.BarCodeScannerConnector;
-import connectors.io.LcdConnector;
-import connectors.io.PrinterConnector;
-import connectors.io.PrinterInterface;
+import io.*;
+import model.db.DaoInterface;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,19 +12,20 @@ import java.util.Optional;
  * @author Albert Żóraw
  */
 
-public class PointOfSale implements ScannerListener {
+public class PointOfSale implements PointOfSaleInterface {
+
     private static final String INVALID_BAR_CODE = "Invalid bar-code";
     private static final String PRODUCT_NOT_FOUND = "Product not found";
 
-    private LcdConnector lcdConnector;
+    private DisplayInterface displayInterface;
     private PrinterInterface printerInterface;
-    private ProductDAO productDAO;
+    private DaoInterface productDAO;
 
     private List<Item> items;
 
-    public PointOfSale(BarCodeScannerConnector barCodeScannerConnector, LcdConnector lcdConnector, PrinterConnector printerInterface, ProductDAO productDAO) {
-        barCodeScannerConnector.setPointOfSale(this);
-        this.lcdConnector = lcdConnector;
+    public PointOfSale(BarCodeScannerInterface barCodeBarCodeScannerInterface, DisplayInterface displayInterface, PrinterInterface printerInterface, DaoInterface productDAO) {
+        barCodeBarCodeScannerInterface.setPointOfSale(this);
+        this.displayInterface = displayInterface;
         this.printerInterface = printerInterface;
         this.productDAO = productDAO;
 
@@ -40,21 +38,22 @@ public class PointOfSale implements ScannerListener {
             Optional<Item> item = productDAO.checkProductAvailability(barCode);
             if (item.isPresent()) {
                 items.add(item.get());
-                lcdConnector.displayItem(item.get());
+                displayInterface.displayItem(item.get());
             } else {
-                lcdConnector.displayError(PRODUCT_NOT_FOUND);
+                displayInterface.displayError(PRODUCT_NOT_FOUND);
             }
         } else {
-            lcdConnector.displayError(INVALID_BAR_CODE);
+            displayInterface.displayError(INVALID_BAR_CODE);
         }
     }
+
     @Override
      public void onExit() {
-        BigDecimal total = new BigDecimal("0");
+        BigDecimal total = new BigDecimal("0").setScale(2);
         for (Item item : items) {
             total = total.add(new BigDecimal(String.valueOf(item.getPrice())));
         }
-        lcdConnector.displayTotalSum(total.toString());
+        displayInterface.displayTotalSum(total.toString());
         printerInterface.printReceipt(items, total.toString());
         items.clear();
     }

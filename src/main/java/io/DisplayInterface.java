@@ -1,8 +1,8 @@
-package connectors.io;
+package io;
 
 import model.Item;
 
-public interface LcdInterface {
+public interface DisplayInterface {
 
     void displayItem(Item item);
 

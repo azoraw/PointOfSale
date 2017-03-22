@@ -1,4 +1,4 @@
-package connectors.io;
+package io;
 
 import model.Item;
 

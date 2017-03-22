@@ -1,8 +1,8 @@
-package connectors.io;
 
+import io.BarCodeScannerInterface;
 import model.PointOfSale;
 
-public class BarCodeScannerConnector implements BarCodeScannerInterface {
+public class BarCodeScanner implements BarCodeScannerInterface {
 
     private PointOfSale pointOfSale;
 
