@@ -7,11 +7,14 @@ import view.IDisplay;
 import view.IPrinter;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class Controller implements IController {
 
-    private static final String INVALID_BAR_CODE = "Invalid bar-code";
-    private static final String PRODUCT_NOT_FOUND = "Product not found";
+    private static final String RESOURCE_PATH = "messages";
+    private static final String INVALID_BAR_CODE = "INVALID_BAR_CODE";
+    private static final String PRODUCT_NOT_FOUND = "PRODUCT_NOT_FOUND";
+    private final ResourceBundle res;
 
     private IPrinter printer;
     private IDisplay display;
@@ -21,6 +24,7 @@ public class Controller implements IController {
         this.display = display;
         this.printer = printer;
         barCodeScanner.addObserver(pointOfSale);
+        res = ResourceBundle.getBundle(RESOURCE_PATH);
     }
 
     @Override
@@ -30,7 +34,7 @@ public class Controller implements IController {
 
     @Override
     public void itemNotFound() {
-        display.displayError(PRODUCT_NOT_FOUND);
+        display.displayError(res.getString(PRODUCT_NOT_FOUND));
     }
 
     @Override
@@ -41,6 +45,6 @@ public class Controller implements IController {
 
     @Override
     public void invalidBarCode() {
-        display.displayError(INVALID_BAR_CODE);
+        display.displayError(res.getString(INVALID_BAR_CODE));
     }
 }
