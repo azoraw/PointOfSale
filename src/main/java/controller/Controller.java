@@ -1,24 +1,22 @@
 package controller;
 
-import app.GUI;
 import model.Item;
 import model.PointOfSale;
 import view.BarCodeScanner;
-import view.BarCodeScannerInterface;
-import view.DisplayInterface;
-import view.PrinterInterface;
+import view.IDisplay;
+import view.IPrinter;
 
 import java.util.List;
 
-public class Controller implements DeviceProvider{
+public class Controller implements IController {
 
     private static final String INVALID_BAR_CODE = "Invalid bar-code";
     private static final String PRODUCT_NOT_FOUND = "Product not found";
 
-    private PrinterInterface printer;
-    private DisplayInterface display;
+    private IPrinter printer;
+    private IDisplay display;
 
-    public Controller(PointOfSale pointOfSale, BarCodeScanner barCodeScanner, DisplayInterface display, PrinterInterface printer) {
+    public Controller(PointOfSale pointOfSale, BarCodeScanner barCodeScanner, IDisplay display, IPrinter printer) {
         pointOfSale.setController(this);
         this.display = display;
         this.printer = printer;
@@ -42,7 +40,7 @@ public class Controller implements DeviceProvider{
     }
 
     @Override
-    public void invalidCode() {
+    public void invalidBarCode() {
         display.displayError(INVALID_BAR_CODE);
     }
 }

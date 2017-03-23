@@ -1,8 +1,7 @@
 package model;
 
-import controller.Controller;
-import controller.DeviceProvider;
-import model.db.DaoInterface;
+import controller.IController;
+import model.db.ItemDAO;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -11,25 +10,25 @@ import java.util.*;
  * @author Albert Żóraw
  */
 
-public class PointOfSale implements PointOfSaleInterface, Observer {
+public class PointOfSale implements IPointOfSale, Observer {
 
-    private DeviceProvider controller;
-    private DaoInterface productDAO;
+    private IController controller;
+    private ItemDAO itemDAO;
 
     private List<Item> items;
 
-    public PointOfSale(DaoInterface productDAO) {
-        this.productDAO = productDAO;
+    public PointOfSale(ItemDAO itemDAO) {
+        this.itemDAO = itemDAO;
         items = new ArrayList<>();
     }
 
-    public void setController(DeviceProvider controller) {
+    public void setController(IController controller) {
         this.controller = controller;
     }
 
     @Override
     public void checkProduct(String barCode) {
-        Optional<Item> item = productDAO.checkProductAvailability(barCode);
+        Optional<Item> item = itemDAO.getItem(barCode);
         if (item.isPresent()) {
             items.add(item.get());
             controller.itemAdded(item.get());
@@ -52,7 +51,7 @@ public class PointOfSale implements PointOfSaleInterface, Observer {
     public void update(Observable o, Object input) {
         switch ((String) input) {
             case "":
-                controller.invalidCode();
+                controller.invalidBarCode();
                 break;
             case "finalizeTransaction":
                 exit();

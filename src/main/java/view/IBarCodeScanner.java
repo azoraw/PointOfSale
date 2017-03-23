@@ -1,6 +1,6 @@
 package view;
 
-public interface BarCodeScannerInterface {
+public interface IBarCodeScanner {
     void input(String input);
 
 }

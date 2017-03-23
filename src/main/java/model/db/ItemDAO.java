@@ -4,16 +4,15 @@ import model.Item;
 import java.util.Map;
 import java.util.Optional;
 
-public class ProductDAO implements DaoInterface {
+public class ItemDAO {
 
     private Map<String, Item> map;
 
-    public ProductDAO(Map<String, Item> map) {
+    public ItemDAO(Map<String, Item> map) {
         this.map = map;
     }
 
-    @Override
-    public Optional<Item> checkProductAvailability(final String barCode) {
+    public Optional<Item> getItem(final String barCode) {
         return Optional.ofNullable(map.get(barCode));
     }
 }

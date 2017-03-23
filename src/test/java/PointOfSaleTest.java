@@ -1,9 +1,9 @@
 import controller.Controller;
 import view.BarCodeScanner;
-import view.DisplayInterface;
-import view.PrinterInterface;
+import view.IDisplay;
+import view.IPrinter;
 import model.*;
-import model.db.ProductDAO;
+import model.db.ItemDAO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +25,9 @@ public class PointOfSaleTest {
     private BarCodeScanner barCodeScanner;
 
     @Mock
-    private DisplayInterface display;
+    private IDisplay display;
     @Mock
-    private PrinterInterface printer;
+    private IPrinter printer;
     @Captor
     private ArgumentCaptor argCaptor;
 
@@ -39,7 +39,7 @@ public class PointOfSaleTest {
         map.put("03", new Item("spinacz", 0.01));
 
         barCodeScanner = new BarCodeScanner();
-        ProductDAO dao = new ProductDAO(map);
+        ItemDAO dao = new ItemDAO(map);
         pointOfSale = new PointOfSale(dao);
         Controller controller = new Controller(pointOfSale, barCodeScanner, display, printer);
 

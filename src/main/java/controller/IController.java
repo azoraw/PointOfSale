@@ -4,13 +4,13 @@ import model.Item;
 
 import java.util.List;
 
-public interface DeviceProvider {
+public interface IController {
 
     void itemAdded(Item item);
 
     void itemNotFound();
 
-    void invalidCode();
+    void invalidBarCode();
 
     void finalizeTransaction(List<Item> items, String s);
 

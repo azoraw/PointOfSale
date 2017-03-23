@@ -2,7 +2,7 @@ package view;
 
 import model.Item;
 
-public interface DisplayInterface {
+public interface IDisplay {
 
     void displayItem(Item item);
 

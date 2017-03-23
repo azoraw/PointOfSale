@@ -1,10 +1,10 @@
 import controller.Controller;
 import view.BarCodeScanner;
-import view.DisplayInterface;
-import view.PrinterInterface;
+import view.IDisplay;
+import view.IPrinter;
 import model.Item;
 import model.PointOfSale;
-import model.db.ProductDAO;
+import model.db.ItemDAO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +20,10 @@ public class ReceiptTest {
     private PointOfSale pointOfSale;
 
     @Mock
-    private DisplayInterface display;
+    private IDisplay display;
 
     private int size;
+    private String sum;
 
     @Before
     public void init() {
@@ -30,10 +31,13 @@ public class ReceiptTest {
 
         map.put("01", new Item("komputer", 2000.00));
         map.put("02", new Item("mysz", 10.00));
-        PrinterInterface printer = (items, sum) -> size = items.size();
+        IPrinter printer = (items, sum) -> {
+            size = items.size();
+            this.sum = sum;
+        };
         BarCodeScanner barCodeScanner = new BarCodeScanner();
-        ProductDAO dao = new ProductDAO(map);
-        pointOfSale = new PointOfSale( dao);
+        ItemDAO dao = new ItemDAO(map);
+        pointOfSale = new PointOfSale(dao);
         Controller controller = new Controller(pointOfSale, barCodeScanner, display, printer);
     }
 
@@ -45,7 +49,5 @@ public class ReceiptTest {
         assertEquals(2, size);
         pointOfSale.exit();
         assertEquals(0, size);
-
-
     }
 }
