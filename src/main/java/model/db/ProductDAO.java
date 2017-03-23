@@ -1,7 +1,6 @@
+package model.db;
 
 import model.Item;
-import model.db.DaoInterface;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -14,7 +13,7 @@ public class ProductDAO implements DaoInterface {
     }
 
     @Override
-    public Optional<Item> checkProductAvailability(String barCode) {
+    public Optional<Item> checkProductAvailability(final String barCode) {
         return Optional.ofNullable(map.get(barCode));
     }
 }

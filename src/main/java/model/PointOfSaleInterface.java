@@ -1,6 +1,6 @@
 package model;
 
 public interface PointOfSaleInterface {
-    void onScan(String barCode);
-    void onExit();
+    void checkProduct(String barCode);
+    void exit();
 }

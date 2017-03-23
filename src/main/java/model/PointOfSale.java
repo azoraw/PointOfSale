@@ -1,61 +1,67 @@
 package model;
 
-import io.*;
+import controller.Controller;
 import model.db.DaoInterface;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Albert Żóraw
  */
 
-public class PointOfSale implements PointOfSaleInterface {
+public class PointOfSale implements PointOfSaleInterface, Observer {
 
     private static final String INVALID_BAR_CODE = "Invalid bar-code";
     private static final String PRODUCT_NOT_FOUND = "Product not found";
 
-    private DisplayInterface displayInterface;
-    private PrinterInterface printerInterface;
+    private Controller controller;
     private DaoInterface productDAO;
 
     private List<Item> items;
 
-    public PointOfSale(BarCodeScannerInterface barCodeBarCodeScannerInterface, DisplayInterface displayInterface, PrinterInterface printerInterface, DaoInterface productDAO) {
-        barCodeBarCodeScannerInterface.setPointOfSale(this);
-        this.displayInterface = displayInterface;
-        this.printerInterface = printerInterface;
+    public PointOfSale(DaoInterface productDAO) {
         this.productDAO = productDAO;
-
         items = new ArrayList<>();
     }
 
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
     @Override
-    public void onScan(String barCode) {
-        if (Validator.isBarCodeValid(barCode)) {
-            Optional<Item> item = productDAO.checkProductAvailability(barCode);
-            if (item.isPresent()) {
-                items.add(item.get());
-                displayInterface.displayItem(item.get());
-            } else {
-                displayInterface.displayError(PRODUCT_NOT_FOUND);
-            }
+    public void checkProduct(String barCode) {
+        Optional<Item> item = productDAO.checkProductAvailability(barCode);
+        if (item.isPresent()) {
+            items.add(item.get());
+            controller.getDisplay().displayItem(item.get());
         } else {
-            displayInterface.displayError(INVALID_BAR_CODE);
+            controller.getDisplay().displayError(PRODUCT_NOT_FOUND);
         }
     }
 
     @Override
-     public void onExit() {
-        BigDecimal total = new BigDecimal("0").setScale(2);
+    public void exit() {
+        BigDecimal total = new BigDecimal("0").setScale(2, BigDecimal.ROUND_HALF_UP);
         for (Item item : items) {
             total = total.add(new BigDecimal(String.valueOf(item.getPrice())));
         }
-        displayInterface.displayTotalSum(total.toString());
-        printerInterface.printReceipt(items, total.toString());
+        controller.getDisplay().displayTotalSum(total.toString());
+        controller.getPrinter().printReceipt(items, total.toString());
         items.clear();
     }
 
+    @Override
+    public void update(Observable o, Object input) {
+        switch ((String) input) {
+            case "":
+                controller.getDisplay().displayError(INVALID_BAR_CODE);
+                break;
+            case "exit":
+                exit();
+                break;
+            default:
+                checkProduct((String) input);
+        }
+    }
 }
