@@ -1,9 +1,17 @@
 package controller;
 
-import view.DisplayInterface;
-import view.PrinterInterface;
+import model.Item;
+
+import java.util.List;
 
 public interface DeviceProvider {
-    DisplayInterface getDisplay();
-    PrinterInterface getPrinter();
+
+    void itemAdded(Item item);
+
+    void itemNotFound();
+
+    void invalidCode();
+
+    void finalizeTransaction(List<Item> items, String s);
+
 }

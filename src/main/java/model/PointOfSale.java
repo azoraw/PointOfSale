@@ -1,6 +1,7 @@
 package model;
 
 import controller.Controller;
+import controller.DeviceProvider;
 import model.db.DaoInterface;
 
 import java.math.BigDecimal;
@@ -12,10 +13,7 @@ import java.util.*;
 
 public class PointOfSale implements PointOfSaleInterface, Observer {
 
-    private static final String INVALID_BAR_CODE = "Invalid bar-code";
-    private static final String PRODUCT_NOT_FOUND = "Product not found";
-
-    private Controller controller;
+    private DeviceProvider controller;
     private DaoInterface productDAO;
 
     private List<Item> items;
@@ -34,9 +32,9 @@ public class PointOfSale implements PointOfSaleInterface, Observer {
         Optional<Item> item = productDAO.checkProductAvailability(barCode);
         if (item.isPresent()) {
             items.add(item.get());
-            controller.getDisplay().displayItem(item.get());
+            controller.itemAdded(item.get());
         } else {
-            controller.getDisplay().displayError(PRODUCT_NOT_FOUND);
+            controller.itemNotFound();
         }
     }
 
@@ -46,8 +44,7 @@ public class PointOfSale implements PointOfSaleInterface, Observer {
         for (Item item : items) {
             total = total.add(new BigDecimal(String.valueOf(item.getPrice())));
         }
-        controller.getDisplay().displayTotalSum(total.toString());
-        controller.getPrinter().printReceipt(items, total.toString());
+        controller.finalizeTransaction(items, total.toString());
         items.clear();
     }
 
@@ -55,9 +52,9 @@ public class PointOfSale implements PointOfSaleInterface, Observer {
     public void update(Observable o, Object input) {
         switch ((String) input) {
             case "":
-                controller.getDisplay().displayError(INVALID_BAR_CODE);
+                controller.invalidCode();
                 break;
-            case "exit":
+            case "finalizeTransaction":
                 exit();
                 break;
             default:

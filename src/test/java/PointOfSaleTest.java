@@ -56,7 +56,7 @@ public class PointOfSaleTest {
         assertEquals(String.valueOf(2199.99), String.valueOf(item.getPrice()));
         barCodeScanner.input("02");
         barCodeScanner.input("03");
-        barCodeScanner.input("exit");
+        barCodeScanner.input("finalizeTransaction");
         assertEquals("2245.00", argCaptor.getValue());
         barCodeScanner.input("02");
         barCodeScanner.input("02");
@@ -80,7 +80,7 @@ public class PointOfSaleTest {
     public void validationTest() {
         barCodeScanner.input("");
         assertEquals("Invalid bar-code", argCaptor.getValue());
-        barCodeScanner.input("exit");
+        barCodeScanner.input("finalizeTransaction");
         assertEquals("0.00", argCaptor.getValue());
     }
 
