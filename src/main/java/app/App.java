@@ -4,6 +4,7 @@ import controller.Controller;
 import model.Item;
 import model.PointOfSale;
 import model.db.ProductDAO;
+import view.BarCodeScanner;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +17,8 @@ public class App {
         map.put("02", new Item("mysz", 45.00));
         map.put("03", new Item("spinacz", 0.01));
         PointOfSale pointOfSale = new PointOfSale(new ProductDAO(map));
-        GUI gui = new GUI();
-        Controller controller = new Controller(pointOfSale,gui,gui,gui);
+        GUI gui = new GUI(new BarCodeScanner());
+        Controller controller = new Controller(pointOfSale, gui.getBarCodeScanner(),gui,gui);
 
     }
 }

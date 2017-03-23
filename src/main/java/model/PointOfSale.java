@@ -23,7 +23,7 @@ public class PointOfSale implements PointOfSaleInterface, Observer {
         items = new ArrayList<>();
     }
 
-    public void setController(Controller controller) {
+    public void setController(DeviceProvider controller) {
         this.controller = controller;
     }
 

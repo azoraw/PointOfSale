@@ -3,8 +3,8 @@ package controller;
 import app.GUI;
 import model.Item;
 import model.PointOfSale;
-import model.PointOfSaleInterface;
 import view.BarCodeScanner;
+import view.BarCodeScannerInterface;
 import view.DisplayInterface;
 import view.PrinterInterface;
 
@@ -18,19 +18,11 @@ public class Controller implements DeviceProvider{
     private PrinterInterface printer;
     private DisplayInterface display;
 
-    public Controller(PointOfSaleInterface pointOfSale, BarCodeScanner barCodeScanner, DisplayInterface display, PrinterInterface printer) {
+    public Controller(PointOfSale pointOfSale, BarCodeScanner barCodeScanner, DisplayInterface display, PrinterInterface printer) {
         pointOfSale.setController(this);
         this.display = display;
         this.printer = printer;
         barCodeScanner.addObserver(pointOfSale);
-    }
-
-    public Controller(PointOfSale pointOfSale, GUI gui) {
-        pointOfSale.setController(this);
-        this.display = gui;
-        this.printer = gui;
-        gui.addObserver(pointOfSale);
-
     }
 
     @Override

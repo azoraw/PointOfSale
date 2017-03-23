@@ -1,6 +1,7 @@
 package app;
 
 import model.Item;
+import view.BarCodeScanner;
 import view.BarCodeScannerInterface;
 import view.DisplayInterface;
 import view.PrinterInterface;
@@ -15,11 +16,18 @@ public class GUI extends Observable implements BarCodeScannerInterface, DisplayI
     private JLabel info;
     private JTextField textField;
     private JFrame frame;
+    private BarCodeScanner barCodeScanner;
 
-    public GUI() {
+    public GUI(BarCodeScanner barCodeScanner) {
+        this.barCodeScanner = barCodeScanner;
+        scan = new JButton("command");
+        textField = new JTextField();
         scan.addActionListener(e -> input(textField.getText()));
         frame = new JFrame("App");
-        frame.setContentPane(new GUI().panel);
+        panel = new JPanel();
+        panel.add(textField);
+        panel.add(scan);
+        frame.setContentPane(panel);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -49,5 +57,9 @@ public class GUI extends Observable implements BarCodeScannerInterface, DisplayI
     @Override
     public void printReceipt(List<Item> items, String sum) {
         JOptionPane.showMessageDialog(null, "total: " + sum);
+    }
+
+    public BarCodeScanner getBarCodeScanner() {
+        return barCodeScanner;
     }
 }
