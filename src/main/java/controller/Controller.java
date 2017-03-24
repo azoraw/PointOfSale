@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 
 public class Controller implements IController {
 
-    private static final String RESOURCE_PATH = "messages";
+    private static final String RESOURCE = "messages";
     private static final String INVALID_BAR_CODE = "INVALID_BAR_CODE";
     private static final String PRODUCT_NOT_FOUND = "PRODUCT_NOT_FOUND";
     private final ResourceBundle res;
@@ -24,7 +24,7 @@ public class Controller implements IController {
         this.display = display;
         this.printer = printer;
         barCodeScanner.addObserver(pointOfSale);
-        res = ResourceBundle.getBundle(RESOURCE_PATH);
+        res = ResourceBundle.getBundle(RESOURCE);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Controller implements IController {
     @Override
     public void finalizeTransaction(List<Item> items, String sum) {
         display.displayTotalSum(sum);
-        printer.printReceipt(items,sum);
+        printer.printReceipt(items, sum);
     }
 
     @Override

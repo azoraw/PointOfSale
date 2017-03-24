@@ -47,7 +47,9 @@ public class ReceiptTest {
         pointOfSale.checkProduct("02");
         pointOfSale.exit();
         assertEquals(2, size);
+        assertEquals("2010.00" ,sum);
         pointOfSale.exit();
         assertEquals(0, size);
+        assertEquals("0.00" ,sum);
     }
 }
